@@ -2,8 +2,6 @@ image: rbekker87/build-tools:latest
 
 stages:
   - ver
-  - init
-  - tests
   - deploy
 
 ver:
@@ -12,17 +10,12 @@ ver:
     - python --version
     - whoami
 
-init:
-  stage: init
-  script:
-    - pip install -r requirements.txt
-
 deploy_staging:
   stage: deploy
   script:
     - git remote add heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/wuxiaapi.git
     - git push heroku master
-    - echo "Deployed to Staging Server https://wuxiaapi.herokuapp.com"
+    - echo "Deployed to Staging Server https://wuxiaapi-staging.herokuapp.com"
   environment:
     name: staging
     url: https://wuxiaapi-staging.herokuapp.com/
