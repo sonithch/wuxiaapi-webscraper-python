@@ -20,7 +20,7 @@ deploy_staging:
     name: staging
     url: https://wuxiaapi-staging.herokuapp.com/
   only:
-    - master
+    - main
 
 deploy_production:
   stage: deploy
@@ -33,4 +33,4 @@ deploy_production:
     url: https://wuxiaapi-prod.herokuapp.com/
   when: manual
   only:
-    - master
+    - main
