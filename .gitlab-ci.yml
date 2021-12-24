@@ -1,12 +1,43 @@
-# You can override the included template(s) by including variable overrides
-# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
-# Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
-# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
-# Note that environment variables can be set in several places
-# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
+image: rbekker87/build-tools:latest
+
 stages:
-- test
-sast:
-  stage: test
-include:
-- template: Security/SAST.gitlab-ci.yml
+  - ver
+  - init
+  - tests
+  - deploy
+
+ver:
+  stage: ver
+  script:
+    - python --version
+    - whoami
+
+init:
+  stage: init
+  script:
+    - pip install -r requirements.txt
+
+deploy_staging:
+  stage: deploy
+  script:
+    - git remote add heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/wuxiaapi.git
+    - git push heroku master
+    - echo "Deployed to Staging Server https://wuxiaapi.herokuapp.com"
+  environment:
+    name: staging
+    url: https://wuxiaapi-staging.herokuapp.com/
+  only:
+    - master
+
+deploy_production:
+  stage: deploy
+  script:
+    - git remote add heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/wuxiaapi-prod.git
+    - git push heroku master
+    - echo "Deployed to Production Server https://wuxiaapi-prod.herokuapp.com"
+  environment:
+    name: production
+    url: https://wuxiaapi-prod.herokuapp.com/
+  when: manual
+  only:
+    - master
