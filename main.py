@@ -1,10 +1,15 @@
 from flask import Flask, request, jsonify
+from apscheduler.schedulers.background import BackgroundScheduler
+import mysql.connector
 
 # local imports
+import novelCrawler
 import webScraper
+import sqlConnect
 
 # constants
 app = Flask(__name__)
+scheduler = BackgroundScheduler()
 
 
 @app.route("/")
@@ -24,6 +29,18 @@ def getChapter():
     return response
 
 
+def test():
+    novelCrawler.novelCrawler()
+
+
+def test1():
+    print("webjob1")
+
+
 # server start
 if __name__ == "__main__":
+    scheduler.add_job(test, "interval", seconds=24 * 60 * 60 * 7)
+    scheduler.add_job(test1, "interval", seconds=1)
+
+    scheduler.start()
     app.run()
