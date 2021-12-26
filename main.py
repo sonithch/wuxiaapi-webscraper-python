@@ -39,7 +39,7 @@ def test1():
 
 # server start
 if __name__ == "__main__":
-    scheduler.add_job(test, "interval", seconds=24 * 60 * 60 * 7)
+    scheduler.add_job(test, "interval", seconds=60*60)
     scheduler.add_job(test1, "interval", seconds=1)
 
     scheduler.start()

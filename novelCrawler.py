@@ -12,7 +12,7 @@ def novelCrawler():
 
     start = time.perf_counter()
 
-    for page in range(1, 100):
+    for page in range(1, 200):
         apiUrl = constants.ASSETURL.replace("@@page", str(page))
         page = bsoup(requests.get(apiUrl).content, "html.parser")
 
