@@ -34,14 +34,6 @@ def test():
     novelCrawler.novelCrawler()
 
 
-def test1():
-    print("webjob1")
-
-
 # server start
 if __name__ == "__main__":
-    scheduler.add_job(test, "interval", seconds=60*60)
-    scheduler.add_job(test1, "interval", seconds=1)
-
-    scheduler.start()
     app.run()
