@@ -5,6 +5,10 @@ from bs4 import BeautifulSoup as bsoup
 import constants
 
 
+def getPage(url: str):
+    return bsoup(requests.get(url).content, "html.parser")
+
+
 def searchNovel(query: str):
     novels = list()
     apiUrl = constants.SEARCHURL.replace("@@query", query)
@@ -16,12 +20,17 @@ def searchNovel(query: str):
 
         url = metadata.get("href")
         imgUrl = metadata.find("img").get("src")
+        lastChapter = novel.find("a", class_="chapter")
 
         novels.append(
             {
                 "title": title,
                 "url": url,
                 "imgUrl": imgUrl,
+                "lastChapter": {
+                    "title": lastChapter.text,
+                    "url": lastChapter.get("href")
+                }
             }
         )
 

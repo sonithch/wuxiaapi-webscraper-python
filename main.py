@@ -15,6 +15,7 @@ def root():
 @app.route("/search")
 def searchNovel():
     response = jsonify(webScraper.searchNovel(request.args.get("query")))
+    response.headers.add("Access-Control-Allow-Origin", "*")
     return response
 
 
