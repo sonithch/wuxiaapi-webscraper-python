@@ -1,0 +1,12 @@
+name: syncJob
+on:
+  schedule:
+    - cron: '0 */24 * * *'
+jobs:
+  cron:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call our API route
+        run: |
+          curl --request POST \
+          --url 'https://wuxiaapi-stg.herokuapp.com/syncJob?key=${{ secrets.SYNCJOBKEY }}'
