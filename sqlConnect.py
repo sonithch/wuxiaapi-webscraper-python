@@ -60,5 +60,3 @@ def insertOrUpdateToTable(connection, table: str, values: tuple, columns: str):
         connection.commit()
     except Error as err:
         print(f"Error: '{err}'")
-
-    print(query)

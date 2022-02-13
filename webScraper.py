@@ -49,5 +49,8 @@ def getChapter(chapterUrl: str):
 
 
 def getChapterCount(chapterUrl: str):
-    page = bsoup(requests.get(chapterUrl).content, "html.parser")
-    return len(page.find("div", class_="chapter-list").find_all("div", class_="row"))
+    try:
+        page = bsoup(requests.get(chapterUrl).content, "html.parser")
+        return len(page.find("div", class_="chapter-list").find_all("div", class_="row"))
+    except:
+        return 0

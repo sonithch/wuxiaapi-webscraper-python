@@ -36,7 +36,6 @@ def getChapter():
 
 @app.route("/syncJob")
 def test():
-
     if request.args.get("key") == str(os.environ.get("SyncJobKey")):
         t = threading.Thread(target=novelCrawler.novelCrawler)
         t.start()
