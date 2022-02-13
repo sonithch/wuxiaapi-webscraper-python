@@ -1,7 +1,7 @@
 name: syncJob
 on:
   schedule:
-    - cron: '0 */24 * * *'
+    - cron: '0 */18 * * *'
 jobs:
   cron:
     runs-on: ubuntu-latest
