@@ -12,7 +12,7 @@ def novelCrawler():
 
     start = time.perf_counter()
 
-    for page in range(1, 200):
+    for page in range(1, 500):
         apiUrl = constants.ASSETURL.replace("@@page", str(page))
         page = bsoup(requests.get(apiUrl).content, "html.parser")
 
@@ -22,7 +22,8 @@ def novelCrawler():
 
             url = metadata.get("href")
             imgUrl = metadata.find("img").get("src")
-            values = tuple([title, url, imgUrl, 0])
+            chapters = webScraper.getChapterCount(url)
+            values = tuple([title, url, imgUrl, chapters])
 
             sqlConnect.insertOrUpdateToTable(connection, "Novels", values, constants.NOVELS_COLUMNS)
 
