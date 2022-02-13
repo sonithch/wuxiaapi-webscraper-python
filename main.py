@@ -1,4 +1,6 @@
 import os
+import _thread
+import threading
 
 from flask import Flask, request, jsonify
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -34,8 +36,16 @@ def getChapter():
 
 @app.route("/syncJob")
 def test():
+
     if request.args.get("key") == str(os.environ.get("SyncJobKey")):
-        novelCrawler.novelCrawler()
+        t = threading.Thread(target=novelCrawler.novelCrawler)
+        t.start()
+        return "syncJob triggered"
+    else:
+        return "Invalid Auth!!"
+
+def syncJob():
+    print("")
 
 
 # server start
