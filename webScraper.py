@@ -22,17 +22,12 @@ def searchNovel(query: str):
         url = metadata.get("href")
         chapters = 0
 
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            future = executor.submit(getChapterCount, url)
-            chapters = future.result()
-
         imgUrl = metadata.find("img").get("src")
         novels.append(
             {
                 "title": title,
                 "url": url,
-                "imgUrl": imgUrl,
-                "chapters": chapters
+                "imgUrl": imgUrl
             }
         )
 
