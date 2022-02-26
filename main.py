@@ -34,6 +34,18 @@ def getChapter():
     return response
 
 
+@app.route("/chapterCount")
+def getChapterCount():
+    response = jsonify(webScraper.getChapterCount(request.args.get("url")))
+    return response
+
+
+@app.route("/titles")
+def getTitles():
+    response = jsonify(webScraper.getTitles(request.args.get("url")))
+    return response
+
+
 @app.route("/syncJob")
 def test():
     if request.args.get("key") == str(os.environ.get("SyncJobKey")):
@@ -42,6 +54,7 @@ def test():
         return "syncJob triggered"
     else:
         return "Invalid Auth!!"
+
 
 def syncJob():
     print("")

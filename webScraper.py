@@ -1,4 +1,5 @@
 import requests
+import concurrent.futures
 from bs4 import BeautifulSoup as bsoup
 
 ## local imports
@@ -19,18 +20,19 @@ def searchNovel(query: str):
         metadata = novel.find("a", attrs={"title": title})
 
         url = metadata.get("href")
-        imgUrl = metadata.find("img").get("src")
-        lastChapter = novel.find("a", class_="chapter")
+        chapters = 0
 
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            future = executor.submit(getChapterCount, url)
+            chapters = future.result()
+
+        imgUrl = metadata.find("img").get("src")
         novels.append(
             {
                 "title": title,
                 "url": url,
                 "imgUrl": imgUrl,
-                "lastChapter": {
-                    "title": lastChapter.text,
-                    "url": lastChapter.get("href")
-                }
+                "chapters": chapters
             }
         )
 
@@ -48,9 +50,28 @@ def getChapter(chapterUrl: str):
     return {"title": title, "content": content}
 
 
+def getTitles(url: str):
+    response = list()
+    try:
+        page = bsoup(requests.get(url).content, "html.parser")
+        titleRows = page.find("div", class_="chapter-list").find_all("div", class_="row")
+        for row in titleRows:
+            metadata = row.find("a")
+            response.insert(0, {
+                "title": metadata.text.strip(),
+                "url": metadata.get("href")
+            })
+
+    except Exception as e:
+        print(e)
+
+    return response
+
+
 def getChapterCount(chapterUrl: str):
     try:
         page = bsoup(requests.get(chapterUrl).content, "html.parser")
         return len(page.find("div", class_="chapter-list").find_all("div", class_="row"))
-    except:
+    except Exception as e:
+        print(e)
         return 0
